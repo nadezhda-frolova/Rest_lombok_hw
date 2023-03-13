@@ -1,8 +1,7 @@
-package model.usersNameUpdate;
+package model.usersnameupdate;
 import lombok.Data;
 
 @Data
 public class UsersNameUpdateResponseModel {
-    //.body("name", is("john"));
     String name, job, updatedAt;
 }

@@ -3,15 +3,15 @@ package specs;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+
 import static helpers.CustomAllureListener.withCustomTemplates;
+import static io.restassured.RestAssured.with;
 import static io.restassured.filter.log.LogDetail.BODY;
 import static io.restassured.filter.log.LogDetail.STATUS;
 import static io.restassured.http.ContentType.JSON;
-import static org.hamcrest.Matchers.notNullValue;
-import static io.restassured.RestAssured.with;
 
-public class UsersNameUpdateSpec {
-    public static RequestSpecification usersNameUpdateRequestSpec = with()
+public class SingleUserNotFoundSpec {
+    public static RequestSpecification singleUserNotFoundRequestSpec = with()
             .filter(withCustomTemplates())
             .log().uri()
             .log().headers()
@@ -20,11 +20,10 @@ public class UsersNameUpdateSpec {
             .baseUri("https://reqres.in")
             .basePath("/api");
 
-    public static ResponseSpecification usersNameUpdateResponseSpec = new ResponseSpecBuilder()
+    public static ResponseSpecification singleUserNotFoundResponseSpec = new ResponseSpecBuilder()
             .log(STATUS)
             .log(BODY)
-            .expectStatusCode(200)
-            .expectBody("name", notNullValue())
+            .expectStatusCode(404)
             .build();
 
 }

@@ -1,24 +1,25 @@
 package tests;
 
-import io.qameta.allure.restassured.AllureRestAssured;
 import lombok.Data;
-import model.createUserTest.CreateUserBodyModel;
-import model.createUserTest.CreateUserResponseModel;
-import model.usersNameUpdate.UsersNameUpdateModel;
-import model.usersNameUpdate.UsersNameUpdateResponseModel;
+import model.createusertest.CreateUserBodyModel;
+import model.createusertest.CreateUserResponseModel;
+import model.usersnameupdate.UsersNameUpdateModel;
+import model.usersnameupdate.UsersNameUpdateResponseModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static helpers.CustomAllureListener.withCustomTemplates;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
-import static org.hamcrest.Matchers.is;
 import static org.assertj.core.api.Assertions.assertThat;
 import static specs.CreateUserSpec.createUserSpecRequest;
 import static specs.CreateUserSpec.createUserSpecResponse;
+import static specs.GetUsersSpec.getUsersRequestSpec;
+import static specs.GetUsersSpec.getUsersResponseSpec;
+import static specs.SingleUserNotFoundSpec.singleUserNotFoundRequestSpec;
+import static specs.SingleUserNotFoundSpec.singleUserNotFoundResponseSpec;
 import static specs.UsersNameUpdateSpec.usersNameUpdateRequestSpec;
 import static specs.UsersNameUpdateSpec.usersNameUpdateResponseSpec;
+import static specs.BadRequestCreateUserSpec.badRequestCreateUserSpec;
+import static specs.BadRequestCreateUserSpec.badRequestResponseSpec;
 
 @Data
 public class ReqresInTests {
@@ -26,7 +27,6 @@ public class ReqresInTests {
     @Test
     @DisplayName("Successful user creation")
     void createUserTest() {
-        //String data = "{ \"name\": \"morpheus\", \"job\": \"leader\" }"; было
         CreateUserBodyModel createUserBody = new CreateUserBodyModel();
         createUserBody.setName("morpheus");
         createUserBody.setJob("leader");
@@ -54,7 +54,6 @@ public class ReqresInTests {
     @Test
     @DisplayName("User's name update")
     void usersNameUpdate() {
-        // String request_body = "{ \"name\": \"john\", \"job\": \"leader\" }";
         UsersNameUpdateModel usersNameBody = new UsersNameUpdateModel();
         usersNameBody.setName("john");
         usersNameBody.setJob("leader");
@@ -81,47 +80,32 @@ public class ReqresInTests {
     void badRequestCreateUserTest() {
         String data = "{ \"name\": , \"job\": \"leader\" }";
 
-        given()
-                .filter(withCustomTemplates())
-                .log().uri()
-                .contentType(JSON)
+        given(badRequestCreateUserSpec)
                 .body(data)
                 .when()
-                .post("https://reqres.in/api/users")
+                .post("/users")
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(400);
+                .spec(badRequestResponseSpec);
     }
 
     @Test
     @DisplayName("Total count of users")
     void getUsers() {
-        given()
-                .filter(withCustomTemplates())
-                .log().uri()
+        given(getUsersRequestSpec)
                 .when()
-                .get("https://reqres.in/api/users?page=2")
+                .get("/users?page=2")
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
-                .body("total", is(12));
-
+                .spec(getUsersResponseSpec);
     }
 
 
     @Test
     @DisplayName("Single user not found")
     void singleUserNotFoundTest() {
-        given()
-                .filter(withCustomTemplates())
-                .log().uri()
+        given(singleUserNotFoundRequestSpec)
                 .when()
-                .get("https://reqres.in/api/users/23")
+                .get("/users/23")
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(404);
+                .spec(singleUserNotFoundResponseSpec);
     }
 }

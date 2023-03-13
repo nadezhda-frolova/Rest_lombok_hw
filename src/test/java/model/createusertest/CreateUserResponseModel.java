@@ -1,4 +1,4 @@
-package model.createUserTest;
+package model.createusertest;
 import lombok.Data;
 @Data
 public class CreateUserResponseModel {
