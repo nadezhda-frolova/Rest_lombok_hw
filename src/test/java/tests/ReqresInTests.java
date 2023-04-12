@@ -5,8 +5,10 @@ import model.createusertest.CreateUserBodyModel;
 import model.createusertest.CreateUserResponseModel;
 import model.usersnameupdate.UsersNameUpdateModel;
 import model.usersnameupdate.UsersNameUpdateResponseModel;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,6 +16,8 @@ import static specs.CreateUserSpec.createUserSpecRequest;
 import static specs.CreateUserSpec.createUserSpecResponse;
 import static specs.GetUsersSpec.getUsersRequestSpec;
 import static specs.GetUsersSpec.getUsersResponseSpec;
+import static specs.LoginSpecs.loginRequestSpec;
+import static specs.LoginSpecs.loginResponseSpec;
 import static specs.SingleUserNotFoundSpec.singleUserNotFoundRequestSpec;
 import static specs.SingleUserNotFoundSpec.singleUserNotFoundResponseSpec;
 import static specs.UsersNameUpdateSpec.usersNameUpdateRequestSpec;
@@ -23,6 +27,20 @@ import static specs.BadRequestCreateUserSpec.badRequestResponseSpec;
 
 @Data
 public class ReqresInTests {
+    @Test
+    @DisplayName("GroovyTest")
+    void checkColorNameWithGroovyTest() {
+
+        step("Check color's name more than 2002 year", () -> {
+            given(loginRequestSpec)
+                    .when()
+                    .get("/unknown")
+                    .then()
+                    .spec(loginResponseSpec)
+                    .body("data.findAll{it.year>2002}.name.flatten()",
+                            CoreMatchers.hasItems("aqua sky", "tigerlily", "blue turquoise"));
+        });
+    }
 
     @Test
     @DisplayName("Successful user creation")
