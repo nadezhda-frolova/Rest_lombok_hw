@@ -1,6 +1,5 @@
 package tests;
 
-import lombok.Data;
 import model.createusertest.CreateUserBodyModel;
 import model.createusertest.CreateUserResponseModel;
 import model.usersnameupdate.UsersNameUpdateModel;
@@ -25,7 +24,6 @@ import static specs.UsersNameUpdateSpec.usersNameUpdateResponseSpec;
 import static specs.BadRequestCreateUserSpec.badRequestCreateUserSpec;
 import static specs.BadRequestCreateUserSpec.badRequestResponseSpec;
 
-@Data
 public class ReqresInTests {
     @Test
     @DisplayName("GroovyTest")
